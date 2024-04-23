@@ -8,6 +8,11 @@ class ReadCmd{
 private:
     string cmd;
 public:
-    ReadCmd(string cmd);
+    ReadCmd(string cmd_);
     ~ReadCmd();
+    void myFor(int start, int end, int step);
+    void myWhile();
+    void myIf();
+    void findfun(); //Возвращает определенный флаг если while, for,if, else, else if,  нет
+    friend ostream &operator<<(ostream &ostr, const ReadCmd &rc);
 };
