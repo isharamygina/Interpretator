@@ -1,0 +1,3 @@
+/Users/petrzaznobin/Desktop/High School/4 семестр/ЯиМП/mp2-2023-lab4-polinoms-main/Interpretator/test/cmake-build-debug/CMakeFiles/interpretator_test.dir
+/Users/petrzaznobin/Desktop/High School/4 семестр/ЯиМП/mp2-2023-lab4-polinoms-main/Interpretator/test/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/petrzaznobin/Desktop/High School/4 семестр/ЯиМП/mp2-2023-lab4-polinoms-main/Interpretator/test/cmake-build-debug/CMakeFiles/rebuild_cache.dir

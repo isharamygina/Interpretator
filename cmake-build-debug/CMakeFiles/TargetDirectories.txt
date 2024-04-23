@@ -1,0 +1,11 @@
+/Users/petrzaznobin/Desktop/High School/4 семестр/ЯиМП/mp2-2023-lab4-polinoms-main/Interpretator/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/petrzaznobin/Desktop/High School/4 семестр/ЯиМП/mp2-2023-lab4-polinoms-main/Interpretator/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/Users/petrzaznobin/Desktop/High School/4 семестр/ЯиМП/mp2-2023-lab4-polinoms-main/Interpretator/cmake-build-debug/samples/CMakeFiles/interpretator.dir
+/Users/petrzaznobin/Desktop/High School/4 семестр/ЯиМП/mp2-2023-lab4-polinoms-main/Interpretator/cmake-build-debug/samples/CMakeFiles/edit_cache.dir
+/Users/petrzaznobin/Desktop/High School/4 семестр/ЯиМП/mp2-2023-lab4-polinoms-main/Interpretator/cmake-build-debug/samples/CMakeFiles/rebuild_cache.dir
+/Users/petrzaznobin/Desktop/High School/4 семестр/ЯиМП/mp2-2023-lab4-polinoms-main/Interpretator/cmake-build-debug/test/CMakeFiles/interpretator_test.dir
+/Users/petrzaznobin/Desktop/High School/4 семестр/ЯиМП/mp2-2023-lab4-polinoms-main/Interpretator/cmake-build-debug/test/CMakeFiles/edit_cache.dir
+/Users/petrzaznobin/Desktop/High School/4 семестр/ЯиМП/mp2-2023-lab4-polinoms-main/Interpretator/cmake-build-debug/test/CMakeFiles/rebuild_cache.dir
+/Users/petrzaznobin/Desktop/High School/4 семестр/ЯиМП/mp2-2023-lab4-polinoms-main/Interpretator/cmake-build-debug/gtest/CMakeFiles/gtest.dir
+/Users/petrzaznobin/Desktop/High School/4 семестр/ЯиМП/mp2-2023-lab4-polinoms-main/Interpretator/cmake-build-debug/gtest/CMakeFiles/edit_cache.dir
+/Users/petrzaznobin/Desktop/High School/4 семестр/ЯиМП/mp2-2023-lab4-polinoms-main/Interpretator/cmake-build-debug/gtest/CMakeFiles/rebuild_cache.dir

@@ -1,0 +1,56 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"jsonFile" : "directory-.-Debug-f5ebdc15457944623624.json",
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "Project",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "interpretator_test::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-interpretator_test-Debug-0cbe7f8d8d2ae511378b.json",
+					"name" : "interpretator_test",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/Users/petrzaznobin/Desktop/High School/4 \u0441\u0435\u043c\u0435\u0441\u0442\u0440/\u042f\u0438\u041c\u041f/mp2-2023-lab4-polinoms-main/Interpretator/test/cmake-build-debug",
+		"source" : "/Users/petrzaznobin/Desktop/High School/4 \u0441\u0435\u043c\u0435\u0441\u0442\u0440/\u042f\u0438\u041c\u041f/mp2-2023-lab4-polinoms-main/Interpretator/test"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 6
+	}
+}
