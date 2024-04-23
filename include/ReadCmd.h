@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <map>
 #pragma once
  using namespace std;
  //Данный класс содержит в себе строку до символа ";".
@@ -8,11 +9,12 @@ class ReadCmd{
 private:
     string cmd;
 public:
-    ReadCmd(string cmd_);
-    ~ReadCmd();
-    void myFor(int start, int end, int step);
-    void myWhile();
-    void myIf();
-    void findfun(); //Возвращает определенный флаг если while, for,if, else, else if,  нет
-    friend ostream &operator<<(ostream &ostr, const ReadCmd &rc);
+    ReadCmd(string cmd_); //конструктор
+    ~ReadCmd(); //деструктор
+    void Parsing(); //разбор строки на составляющие (функции, переменные)
+    void myFor(int start, int end, int step); //обработка for
+    void myWhile();//обработка while
+    void myIf(); // обработка if-else_if-else
+    void findfun(); //Возвращает определенный флаг если while, for, if, else, else if, print, input,  нет
+    friend ostream &operator<<(ostream &ostr, const ReadCmd &rc); //вывод строки (при исключениях) (можно выводить и номер строки)
 };
