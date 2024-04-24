@@ -7,7 +7,7 @@
  //Данный класс разибрает строку на команды и выполняет их.
 class ReadCmd{
 private:
-    string cmd;
+    string cmd; //считываемая команда (строчка)
     map<string, double> vals; //мапа переменных//может надо перекинуть в ReadBlock и затем унаследовать сюда????
     map<string, int> dataTypes;//мапа типов данных
     map<string, int> funcs; //мапа доступных функций
@@ -15,7 +15,7 @@ private:
 public:
     ReadCmd(string cmd_); //конструктор
     ~ReadCmd(); //деструктор
-    void Parsing(); //разбор строки на составляющие (функции, переменные)
+    void Parsing(); //разбор строки на составляющие (функции, переменные, операции)
     void myValue(string type); //обработка объявления переменной
     void changeValue(); //обработка изменения переменной
     void myFor(); //обработка for

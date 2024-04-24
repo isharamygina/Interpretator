@@ -56,80 +56,86 @@ void ReadCmd::myValue(string type) {
     string data= "";
     if (dataTypes.count(type) == 1){
         switch (type[0]) {
-            case 'i':
-                for (int i = type.size()+1; cmd[i]!=' '; i++){
+            case 'i': {
+                for (int i = type.size() + 1; cmd[i] != ' '; i++) {
                     name.push_back(cmd[i]);
                 }
-                while(cmd[i]!= '='){
+                while (cmd[i] != '=') {
                     i++;
-                    if (i > cmd.size()){
+                    if (i > cmd.size()) {
                         throw length_error("No symbol = in assignment");
                     }
                 }
                 i++;
-                for(i;cmd[i]!=';'; i++){
+                for (i; cmd[i] != ';'; i++) {
                     data.push_back(cmd[i]);
                 }
                 int intData = stringToInt(data);
                 vals.insert(pair<string, int>(name, intData));
                 break;
+            }
 
-            case 'd':
-                for (int i = type.size()+1; cmd[i]!=' '; i++){
+            case 'd': {
+                for (int i = type.size() + 1; cmd[i] != ' '; i++) {
                     name.push_back(cmd[i]);
                 }
-                while(cmd[i]!= '='){
+                while (cmd[i] != '=') {
                     i++;
-                    if (i > cmd.size()){
+                    if (i > cmd.size()) {
                         throw length_error("No symbol = in assignment");
                     }
                 }
                 i++;
-                for(i;cmd[i]!=';'; i++){
+                for (i; cmd[i] != ';'; i++) {
                     data.push_back(cmd[i]);
                 }
                 int doubleData = stringToDouble(data);
                 vals.insert(pair<string, int>(name, doubleData));
                 break;
+            }
 
-            case 'f':
-                for (int i = type.size()+1; cmd[i]!=' '; i++){
+            case 'f': {
+                for (int i = type.size() + 1; cmd[i] != ' '; i++) {
                     name.push_back(cmd[i]);
                 }
-                while(cmd[i]!= '='){
+                while (cmd[i] != '=') {
                     i++;
-                    if (i > cmd.size()){
+                    if (i > cmd.size()) {
                         throw length_error("No symbol = in assignment");
                     }
                 }
                 i++;
-                for(i;cmd[i]!=';'; i++){
+                for (i; cmd[i] != ';'; i++) {
                     data.push_back(cmd[i]);
                 }
                 int floatData = stringToFloat(data);
                 vals.insert(pair<string, int>(name, floatData));
                 break;
-
-            case 'c':
-                for (int i = type.size()+1; cmd[i]!=' '; i++){
+            }
+            case 'c': {
+                for (int i = type.size() + 1; cmd[i] != ' '; i++) {
                     name.push_back(cmd[i]);
                 }
-                while(cmd[i]!= '='){
+                while (cmd[i] != '=') {
                     i++;
-                    if (i > cmd.size()){
+                    if (i > cmd.size()) {
                         throw length_error("No symbol = in assignment");
                     }
                 }
                 i++;
-                for(i;cmd[i]!=';'; i++){
+                for (i; cmd[i] != ';'; i++) {
                     data.push_back(cmd[i]);
                 }
                 int charData = stringToChar(data);
                 vals.insert(pair<string, int>(name, charData));
                 break;
+            }
 
             default: //значит это операция над переменной
-
+            {
+                string val1 = "";
+                string val2 = "";
+                char op;
                 for (int i; cmd[i]!= ' '; i++){
                     name.push_back(cmd[i]);
                 }
@@ -140,10 +146,74 @@ void ReadCmd::myValue(string type) {
                     }
                 }
                 i++;
-                for(i; ops.count(cmd[i])==0; i++){
-
+                auto found = vals.find(val1);
+                for(i; found==vals.cend(); i++) {
+                    if (i > cmd.size()) {
+                        throw length_error("Value error in operation");
+                    }
+                    val1.push_back(cmd[i]);
+                    found = vals.find(val1);
                 }
-                break;
+                i+=2;
+                if (ops.count(cmd[i]) == 1) {op = cmd[i];}
+                else {throw logic_error ("Syntaxis operation error");}
+                i++;
+                found = vals.find(val2);
+                for(i; found==vals.cend(); i++) {
+                    if (i > cmd.size()) {
+                        throw length_error("Value error in operation");
+                    }
+                    val2.push_back(cmd[i]);
+                    found = vals.find(val1);
+                }
+                found = vals.find(name);
+                switch (op) {
+
+                    case '+':
+                        if (found == vals.cend()) {
+                            vals.insert(pair<string, int>(name, vals.find(val1)->second + vals.find(val2)->second));
+                        } else {
+                            vals.find(name)->second = vals.find(val1)->second + vals.find(val2)->second;
+                        }
+                        break;
+                    case '-':
+                        if (found == vals.cend()) {
+                            vals.insert(pair<string, int>(name, vals.find(val1)->second - vals.find(val2)->second));
+                        } else {
+                            vals.find(name)->second = vals.find(val1)->second - vals.find(val2)->second;
+                        }
+                        break;
+
+                    case '*':
+                        if (found == vals.cend()) {
+                            vals.insert(pair<string, int>(name, vals.find(val1)->second * vals.find(val2)->second));
+                        } else {
+                            vals.find(name)->second = vals.find(val1)->second * vals.find(val2)->second;
+                        }
+                        break;
+
+                    case '/':
+                        if (found == vals.cend()) {
+                            if (vals.find(val2)->second != 0) {
+                                vals.insert(pair<string, int>(name, vals.find(val1)->second / vals.find(val2)->second));
+                            } else { throw logic_error("Div 0"); }
+                        } else {
+                            if (vals.find(val2)->second != 0) {
+                                vals.find(name)->second = vals.find(val1)->second / vals.find(val2)->second;
+                            } else { throw logic_error("Div 0"); }
+                        }
+                        break;
+
+                    case '%':
+                        if (found == vals.cend()) {
+                            vals.insert(pair<string, int>(name,
+                                                          int(vals.find(val1)->second) % int(vals.find(val2)->second)));
+                        } else {
+                            vals.find(name)->second = int(vals.find(val1)->second) % int(vals.find(val2)->second);
+                        }
+                        break;
+                }
+            }
         }
     }
 }
