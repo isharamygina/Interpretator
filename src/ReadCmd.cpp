@@ -217,3 +217,118 @@ void ReadCmd::myValue(string type) {
         }
     }
 }
+int ReadCmd::stringToInt(string data)
+{
+	int res = 0;
+	for (char i: data)
+	{
+		if (i < '0' || i > '9')
+			throw invalid_argument("Expected int");
+		res = res * 10 + i-'0';
+	}
+	return res;
+}
+
+char ReadCmd::stringToChar(string data)
+{
+	if (data.size() > 1)
+		throw invalid_argument("Expected one symbol");
+	return data[0];
+}
+bool ReadCmd::isDigit(const char& first_symbol)
+{
+	if ((first_symbol <= '9' && first_symbol >= '0') || first_symbol == '.')
+		return true;
+	return false;
+}
+
+void ReadCmd::doubleCheck(string data)
+{
+	int e = 0;
+	int dot = 0;
+	
+	for (char i : data)
+	{
+		if (i == 'e') e++;
+		if (i == '.') dot++;
+	}
+	if (e > 1 || dot > 1 || data.find('e') < data.find('.'))
+	{
+		throw invalid_argument("The mistake in a digit");
+	}
+	if (data[data.length() - 1] == 'e')
+	{
+		throw invalid_argument("The mistake in a digit");
+	}
+	for (size_t j = 0; j < data.length(); j++)
+		if (!(isDigit(data[j]) || data[j] == 'e' || data[j] == '+' || data[j] == '-'))
+		{
+			throw invalid_argument("The mistake in a digit");
+		}
+	
+}
+
+double ReadCmd::stringToDouble(string data)
+{
+	doubleCheck(data);
+	double res = 0.0, sign = 1.0;
+
+if (data.find('.') != -1 && data.find('e') == -1) {//there is dot
+
+	double beforepoint = 0, afterpoint = 0;
+	string beforepoint_s, afterpoint_s;
+	size_t p = data.find('.');//position of the dot
+
+	for (size_t i = 0; i < p; i++) { beforepoint_s += data[i]; }
+	for (size_t i = p + 1; i < data.size(); i++) { afterpoint_s += data[i]; }
+
+	beforepoint = stringToDouble(beforepoint_s);
+	afterpoint = stringToDouble(afterpoint_s);
+
+	afterpoint /= pow(10, afterpoint_s.size());
+
+	res = beforepoint + afterpoint;
+
+}
+
+else if (data.find('e') != -1) {//there is e
+
+	double beforeE = 0.0, afterE = 0.0;
+	string beforeE_s, afterE_s;
+
+	size_t p = data.find('e');
+
+	for (size_t i = 0; i < p; i++) { beforeE_s += data[i]; }
+	for (size_t i = p + 1; i < data.size(); i++) { afterE_s += data[i]; }
+
+	beforeE = stringToDouble(beforeE_s);
+	afterE = stringToDouble(afterE_s);
+
+	if (afterE > 0) res = beforeE * pow(10.0, afterE);
+	else {
+		res = beforeE;
+		for (size_t i = 0; i < (-1.0 * afterE); i++) { res /= 10; }
+	}
+}
+
+else { //no dot, no e
+
+	if (data[0] == '~' || data[0] == '-') {
+
+		for (size_t i = 1; i < data.size(); i++) {
+			res = res * 10.0 + static_cast<double>(data[i] - '0');
+		}
+		res *= -1.0;
+	}
+
+	else {
+
+		for (size_t i = 0; i < data.size(); i++) {
+			res = res * 10.0 + static_cast<double>(data[i] - '0');
+		}
+	}
+}
+
+return res; 
+}
+
