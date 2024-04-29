@@ -8,8 +8,24 @@
 //чтобы выполнить операцию над переменной, нужно сначала ее объявить, причем при объявлении после и перед равно нужны пробелы
 
 #include <iostream>
+#include <fstream>
+#include "ReadCmd.h"
+using namespace std;
 
 int main(){
-    using namespace std;
+    string cmd;
+    ifstream fin;
+    fin.open("hello.txt"); // окрываем файл для чтения
+    if (!fin.is_open()) {
+        cout << "ERROR OPEN!";
+    }
 
+    else{
+        while (getline(fin, cmd))
+        {
+            ReadCmd rc(cmd);
+            rc.Parsing();
+        }
+    }
+    fin.close();     // закрываем файл
 }

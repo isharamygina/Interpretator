@@ -26,6 +26,28 @@ ReadCmd::~ReadCmd() {
     funcs.clear();
 }
 
+char ReadCmd::case_symb(string symb) {
+    if (symb=="=="){
+        return '1';
+    }
+    else if(symb == "!="){
+        return '2';
+    }
+    else if(symb == ">"){
+        return '3';
+    }
+    else if(symb == ">="){
+        return '4';
+    }
+    else if(symb == "<"){
+        return '5';
+    }
+    else if(symb == "<="){
+        return '6';
+    }
+    else {throw invalid_argument("ERROR IN CONDITION");}
+}
+
 void ReadCmd::Parsing() {
     int i = 0;
     string word = "";
@@ -36,21 +58,21 @@ void ReadCmd::Parsing() {
     if (funcs.count(word) == 1) {
         switch (word[i]) {
             case 'i' || 'e':
-                myIf();
+                procIf();
                 break;
             case 'f':
-                myFor();
+                procFor();
                 break;
             case 'w':
-                myWhile();
+                procWhile();
                 break;
         }
     } else {
-        myValue(word);
+        procValue(word);
     }
 }
 
-void ReadCmd::myValue(string type) {
+void ReadCmd::procValue(string type) {
     int i = 0;
     string name= "";
     string data= "";
@@ -128,6 +150,7 @@ void ReadCmd::myValue(string type) {
                 }
                 int charData = stringToChar(data);
                 vals.insert(pair<string, int>(name, charData));
+                brackets.push(name);
                 break;
             }
 
@@ -217,6 +240,99 @@ void ReadCmd::myValue(string type) {
         }
     }
 }
+
+void ReadCmd::procIf() {
+    brackets.push("{");
+    int i = 0;
+    string left = "";
+    string right = "";
+    string symb = "";
+    while (cmd[i]!=' '){
+        left.push_back(cmd[i]);
+        i++;
+    }
+    i++;
+    while (cmd[i]!= ' ') {
+        symb.push_back(cmd[i]);
+    }
+    i++;
+    while (cmd[i]!=')'){
+        right.push_back(cmd[i]);
+    }
+    switch (case_symb(symb)) {
+        case '1':
+        {
+            if (vals.count(left)>0 && vals.count(right)>0){
+                if (left == right){
+
+                }
+                else{
+
+                }
+                break;
+            }
+        }
+        case '2':
+        {
+            if (vals.count(left)>0 && vals.count(right)>0){
+                if (left != right){
+
+                }
+                else{
+
+                }
+            }
+            break;
+        }
+        case '3':
+        {
+            if (vals.count(left)>0 && vals.count(right)>0){
+                if (left > right){
+
+                }
+                else{
+
+                }
+            }
+        }
+        case '4':
+        {
+            if (vals.count(left)>0 && vals.count(right)>0){
+                if (left >= right){
+
+                }
+                else{
+
+                }
+            }
+        }
+        case '5':
+        {
+            if (vals.count(left)>0 && vals.count(right)>0){
+                if (left < right){
+
+                }
+                else{
+
+                }
+            }
+        }
+        case '6':
+        {
+            if (vals.count(left)>0 && vals.count(right)>0){
+                if (left <= right){
+
+                }
+                else{
+
+                }
+            }
+        }
+
+    }
+
+}
+
 int ReadCmd::stringToInt(string data)
 {
 	int res = 0;
@@ -240,6 +356,13 @@ bool ReadCmd::isDigit(const char& first_symbol)
 	if ((first_symbol <= '9' && first_symbol >= '0') || first_symbol == '.')
 		return true;
 	return false;
+}
+
+bool ReadCmd::isDigit(char first_symbol)
+{
+    if ((first_symbol <= '9' && first_symbol >= '0') || first_symbol == '-' || first_symbol == '.')
+        return true;
+    return false;
 }
 
 void ReadCmd::doubleCheck(string data)
@@ -331,35 +454,10 @@ else { //no dot, no e
 
 return res; 
 }
-void ReadCmd::floatCheck(string data)
+
+float ReadCmd::stringToFloat(string data)
 {
-	int e = 0;
-	int dot = 0;
-
-	for (char i : data)
-	{
-		if (i == 'e') e++;
-		if (i == '.') dot++;
-	}
-	if (e > 1 || dot > 1 || data.find('e') < data.find('.'))
-	{
-		throw invalid_argument("The mistake in a digit");
-	}
-	if (data[data.length() - 1] == 'e')
-	{
-		throw invalid_argument("The mistake in a digit");
-	}
-	for (size_t j = 0; j < data.length(); j++)
-		if (!(isDigit(data[j]) || data[j] == 'e' || data[j] == '+' || data[j] == '-'))
-		{
-			throw invalid_argument("The mistake in a digit");
-		}
-
-}
-
-double ReadCmd::stringToFloat(string data)
-{
-	floatCheck(data);
+	doubleCheck(data);
 	float res = 0.0, sign = 1.0;
 
 	if (data.find('.') != -1 && data.find('e') == -1) {//there is dot
