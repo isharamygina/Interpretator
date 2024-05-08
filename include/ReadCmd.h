@@ -28,7 +28,7 @@ public:
     double stringToDouble(string data); //преобразование строки в double
     float stringToFloat(string data); //преобразование строки в float
     void doubleCheck(string data);
-    bool isDigit(const char& first_symbol);
+   // bool isDigit(const char& first_symbol);
     bool isDigit(char first_symbol);
     void procIf();
     void procWhile();
