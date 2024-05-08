@@ -15,11 +15,13 @@ private:
     map<string, int> funcs; //мапа доступных функций
     map<char, int> ops; //мапа доступных операций
     char case_symb(string symb); //функция, возращающая спец. код знака сравнения
+    bool should_read_cmd = true;
+    char last_func = '0';
 public:
     ReadCmd(string cmd_); //конструктор
     ~ReadCmd(); //деструктор
     void Parsing(); //разбор строки на составляющие (функции, переменные, операции)
-    void procValue(string type); //обработка объявления переменной
+    void procValue(string type, string cmd_); //обработка объявления переменной
     void changeValue(); //обработка изменения переменной
     void findfun(); //Возвращает определенный флаг если while, for, if, else, else if, print, input,  нет
     int stringToInt(string data); //преобразование строки в int
@@ -32,8 +34,6 @@ public:
     void procWhile();
     void procFor();
     void procMain();
-
-
     char stringToChar(string data); //преобразование строки в char
     friend ostream &operator<<(ostream &ostr, const ReadCmd &rc); //вывод строки (при исключениях) (можно выводить и номер строки)
 };

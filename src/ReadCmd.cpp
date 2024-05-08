@@ -1,4 +1,5 @@
 #include "ReadCmd.h"
+#include <regex>
 using namespace std;
 
 ReadCmd::ReadCmd(string cmd_) {
@@ -48,105 +49,114 @@ char ReadCmd::case_symb(string symb) {
     else {throw invalid_argument("ERROR IN CONDITION");}
 }
 
+//ДОБАВИТЬ СЛУЧАЙ ЗАКРЫТИЯ СКОБКИ!!!!!
 void ReadCmd::Parsing() {
-    int i = 0;
-    string word = "";
-    while (cmd[i]!= ' ' || cmd[i]!='(') {
-        word.push_back(cmd[i]);
-        i ++;
-    }
-    if (funcs.count(word) == 1) {
-        switch (word[i]) {
-            case 'i' || 'e':
-                procIf();
-                break;
-            case 'f':
-                procFor();
-                break;
-            case 'w':
-                procWhile();
-                break;
+
+    if(should_read_cmd == true){
+        int i = 0;
+        string word = "";
+        while (cmd[i]!= ' ' || cmd[i]!='(') {
+            word.push_back(cmd[i]);
+            i ++;
         }
-    } else {
-        procValue(word);
+        if (funcs.count(word) == 1) {//ДОБАВИТЬ СЛУЧАЙ ЗАКРЫТИЯ СКОБКИ!!!!!
+            switch (word[i]) {
+                case 'i' || 'e':
+                    procIf();
+                    break;
+                case 'f':
+                    procFor();
+                    break;
+                case 'w':
+                    procWhile();
+                    break;
+            }
+        } else {
+            procValue(word, cmd);
+        }
     }
 }
 
-void ReadCmd::procValue(string type) {
+//первая буква названия переменной - тип переменной
+void ReadCmd::procValue(string type, string cmd_) {
     int i = 0;
     string name= "";
     string data= "";
     if (dataTypes.count(type) == 1){
+        name.push_back(type[0]);
         switch (type[0]) {
             case 'i': {
-                for (int i = type.size() + 1; cmd[i] != ' '; i++) {
-                    name.push_back(cmd[i]);
+                for (int i = type.size() + 1; cmd_[i] != ' '; i++) {
+                    name.push_back(cmd_[i]);
                 }
-                while (cmd[i] != '=') {
+                while (cmd_[i] != '=') {
                     i++;
-                    if (i > cmd.size()) {
+                    if (i > cmd_.size()) {
                         throw length_error("No symbol = in assignment");
                     }
                 }
                 i++;
-                for (i; cmd[i] != ';'; i++) {
-                    data.push_back(cmd[i]);
+                for (i; cmd_[i] != ';'; i++) {
+                    data.push_back(cmd_[i]);
                 }
                 int intData = stringToInt(data);
                 vals.insert(pair<string, int>(name, intData));
+                brackets.push(name);
                 break;
             }
 
             case 'd': {
-                for (int i = type.size() + 1; cmd[i] != ' '; i++) {
-                    name.push_back(cmd[i]);
+                for (int i = type.size() + 1; cmd_[i] != ' '; i++) {
+                    name.push_back(cmd_[i]);
                 }
-                while (cmd[i] != '=') {
+                while (cmd_[i] != '=') {
                     i++;
-                    if (i > cmd.size()) {
+                    if (i > cmd_.size()) {
                         throw length_error("No symbol = in assignment");
                     }
                 }
                 i++;
-                for (i; cmd[i] != ';'; i++) {
-                    data.push_back(cmd[i]);
+                for (i; cmd_[i] != ';'; i++) {
+                    data.push_back(cmd_[i]);
                 }
                 int doubleData = stringToDouble(data);
                 vals.insert(pair<string, int>(name, doubleData));
+                brackets.push(name);
                 break;
             }
 
             case 'f': {
-                for (int i = type.size() + 1; cmd[i] != ' '; i++) {
-                    name.push_back(cmd[i]);
+                for (int i = type.size() + 1; cmd_[i] != ' '; i++) {
+                    name.push_back(cmd_[i]);
                 }
-                while (cmd[i] != '=') {
+                while (cmd_[i] != '=') {
                     i++;
-                    if (i > cmd.size()) {
+                    if (i > cmd_.size()) {
                         throw length_error("No symbol = in assignment");
                     }
                 }
                 i++;
-                for (i; cmd[i] != ';'; i++) {
-                    data.push_back(cmd[i]);
+                for (i; cmd_[i] != ';'; i++) {
+                    data.push_back(cmd_[i]);
                 }
                 int floatData = stringToFloat(data);
                 vals.insert(pair<string, int>(name, floatData));
+                brackets.push(name);
                 break;
             }
             case 'c': {
-                for (int i = type.size() + 1; cmd[i] != ' '; i++) {
-                    name.push_back(cmd[i]);
+                for (int i = type.size() + 1; cmd_[i] != ' '; i++) {
+                    name.push_back(cmd_[i]);
                 }
-                while (cmd[i] != '=') {
+                while (cmd_[i] != '=') {
                     i++;
-                    if (i > cmd.size()) {
+                    if (i > cmd_.size()) {
                         throw length_error("No symbol = in assignment");
                     }
                 }
                 i++;
-                for (i; cmd[i] != ';'; i++) {
-                    data.push_back(cmd[i]);
+                for (i; cmd_[i] != ';'; i++) {
+                    data.push_back(cmd_[i]);
                 }
                 int charData = stringToChar(data);
                 vals.insert(pair<string, int>(name, charData));
@@ -159,34 +169,34 @@ void ReadCmd::procValue(string type) {
                 string val1 = "";
                 string val2 = "";
                 char op;
-                for (int i; cmd[i]!= ' '; i++){
-                    name.push_back(cmd[i]);
+                for (int i; cmd_[i]!= ' '; i++){
+                    name.push_back(cmd_[i]);
                 }
-                while(cmd[i]!= '=') {
+                while(cmd_[i]!= '=') {
                     i++;
-                    if (i > cmd.size()) {
+                    if (i > cmd_.size()) {
                         throw length_error("No symbol = in operation");
                     }
                 }
                 i++;
                 auto found = vals.find(val1);
                 for(i; found==vals.cend(); i++) {
-                    if (i > cmd.size()) {
+                    if (i > cmd_.size()) {
                         throw length_error("Value error in operation");
                     }
-                    val1.push_back(cmd[i]);
+                    val1.push_back(cmd_[i]);
                     found = vals.find(val1);
                 }
                 i+=2;
-                if (ops.count(cmd[i]) == 1) {op = cmd[i];}
+                if (ops.count(cmd_[i]) == 1) {op = cmd_[i];}
                 else {throw logic_error ("Syntaxis operation error");}
                 i++;
                 found = vals.find(val2);
                 for(i; found==vals.cend(); i++) {
-                    if (i > cmd.size()) {
+                    if (i > cmd_.size()) {
                         throw length_error("Value error in operation");
                     }
-                    val2.push_back(cmd[i]);
+                    val2.push_back(cmd_[i]);
                     found = vals.find(val1);
                 }
                 found = vals.find(name);
@@ -242,11 +252,11 @@ void ReadCmd::procValue(string type) {
 }
 
 void ReadCmd::procIf() {
-    brackets.push("{");
     int i = 0;
     string left = "";
     string right = "";
     string symb = "";
+    while(cmd[i]!='('){i++;}
     while (cmd[i]!=' '){
         left.push_back(cmd[i]);
         i++;
@@ -264,10 +274,11 @@ void ReadCmd::procIf() {
         {
             if (vals.count(left)>0 && vals.count(right)>0){
                 if (left == right){
-
+                    brackets.push("{");
+                    last_func = 'i';
                 }
                 else{
-
+                    should_read_cmd = false;
                 }
                 break;
             }
@@ -276,10 +287,11 @@ void ReadCmd::procIf() {
         {
             if (vals.count(left)>0 && vals.count(right)>0){
                 if (left != right){
-
+                    brackets.push("{");
+                    last_func = 'i';
                 }
                 else{
-
+                    should_read_cmd = false;
                 }
             }
             break;
@@ -288,10 +300,11 @@ void ReadCmd::procIf() {
         {
             if (vals.count(left)>0 && vals.count(right)>0){
                 if (left > right){
-
+                    brackets.push("{");
+                    last_func = 'i';
                 }
                 else{
-
+                    should_read_cmd = false;
                 }
             }
         }
@@ -299,10 +312,11 @@ void ReadCmd::procIf() {
         {
             if (vals.count(left)>0 && vals.count(right)>0){
                 if (left >= right){
-
+                    brackets.push("{");
+                    last_func = 'i';
                 }
                 else{
-
+                    should_read_cmd = false;
                 }
             }
         }
@@ -310,10 +324,11 @@ void ReadCmd::procIf() {
         {
             if (vals.count(left)>0 && vals.count(right)>0){
                 if (left < right){
-
+                    brackets.push("{");
+                    last_func = 'i';
                 }
                 else{
-
+                    should_read_cmd = false;
                 }
             }
         }
@@ -321,15 +336,86 @@ void ReadCmd::procIf() {
         {
             if (vals.count(left)>0 && vals.count(right)>0){
                 if (left <= right){
-
+                    brackets.push("{");
+                    last_func = 'i';
                 }
                 else{
-
+                    should_read_cmd = false;
                 }
             }
         }
 
     }
+
+}
+
+void ReadCmd::procMain() {
+    brackets.push("{");
+}
+
+void ReadCmd::procFor() {
+    regex forRegex("for\\(((.*?)\\s(.*?));(.*?);(.*?)\\)\\{");
+    smatch match;
+    int i = 0;
+    if (regex_search(cmd, match, forRegex)){
+        string type = match[2].str();
+        string initialization = match[1].str();
+        string condition = match[4].str();
+        string increment = match[5].str();
+        procValue(type, initialization); //processing of initialization
+        regex conditionRegex("(.*)([<|>])(.*)"); //processing condition
+        smatch match;
+        if(regex_search(condition, match, conditionRegex)){
+            string tmp = "";
+            string first_name = match[1].str();
+            string symbol = match[2].str();
+            string second_name = match[3].str();
+            tmp = first_name;
+            if (vals.count(tmp.insert(0, "i"))==1){
+                first_name.insert(0, "i");
+            }
+            else if (tmp.erase(0,1) == first_name && vals.count(tmp.insert(0, "d"))==1){
+                first_name.insert(0, "i");
+            }
+            else if (tmp.erase(0,1) == first_name && vals.count(tmp.insert(0, "f"))==1){
+                first_name.insert(0, "f");
+            }
+            else if (tmp.erase(0,1) == first_name && vals.count(tmp.insert(0, "c"))==1){
+                first_name.insert(0, "c");
+            }
+            else{throw invalid_argument ("first variable not found in for loop");}
+
+            tmp = second_name;
+            if (vals.count(tmp.insert(0, "i"))==1){
+                second_name.insert(0, "i");
+            }
+            else if (tmp.erase(0,1) == first_name && vals.count(tmp.insert(0, "d"))==1){
+                second_name.insert(0, "i");
+            }
+            else if (tmp.erase(0,1) == first_name && vals.count(tmp.insert(0, "f"))==1){
+                second_name.insert(0, "f");
+            }
+            else if (tmp.erase(0,1) == first_name && vals.count(tmp.insert(0, "c"))==1){
+                second_name.insert(0, "c");
+            }
+            else{throw invalid_argument ("second variable not found in for loop");}
+
+            if (increment[1] == '+' && increment[2] == '+'){
+                tmp = "+";
+            }
+            else if (increment[1] == '-' && increment[2] == '-'){
+                tmp = "-";
+            }
+            else{throw invalid_argument("increment or decrement is invalid");}
+
+
+
+
+        }
+        else{throw invalid_argument("incorrect initialization of the For loop");}
+
+    }
+    else{throw invalid_argument("incorrect initialization of the For loop");}
 
 }
 
@@ -351,6 +437,7 @@ char ReadCmd::stringToChar(string data)
 		throw invalid_argument("Expected one symbol");
 	return data[0];
 }
+
 bool ReadCmd::isDigit(const char& first_symbol)
 {
 	if ((first_symbol <= '9' && first_symbol >= '0') || first_symbol == '.')
