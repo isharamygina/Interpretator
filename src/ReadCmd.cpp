@@ -307,6 +307,7 @@ void ReadCmd::procIf() {
                     should_read_cmd = false;
                 }
             }
+            break;
         }
         case '4':
         {
@@ -319,6 +320,7 @@ void ReadCmd::procIf() {
                     should_read_cmd = false;
                 }
             }
+            break;
         }
         case '5':
         {
@@ -331,6 +333,7 @@ void ReadCmd::procIf() {
                     should_read_cmd = false;
                 }
             }
+            break;
         }
         case '6':
         {
@@ -343,6 +346,7 @@ void ReadCmd::procIf() {
                     should_read_cmd = false;
                 }
             }
+            break;
         }
 
     }
@@ -351,6 +355,134 @@ void ReadCmd::procIf() {
 
 void ReadCmd::procMain() {
     brackets.push("{");
+}
+
+void ReadCmd::procWhile() {
+    regex whileRegex("while\\((.*?)\\)\\{");
+
+    smatch match;
+    if (regex_search(cmd, match, whileRegex)) {
+        string condition = match[1].str();
+        regex conditionRegex("(.*)(.*)(.*)"); //processing condition
+        smatch match;
+        if (regex_search(condition, match, conditionRegex)) {
+            string tmp = "";
+            string first_name = match[1].str();
+            string symbol = match[2].str();
+            string second_name = match[3].str();
+            tmp = first_name;
+            if (vals.count(tmp.insert(0, "i")) == 1) {
+                first_name.insert(0, "i");
+            }
+            else if (tmp.erase(0, 1) == first_name && vals.count(tmp.insert(0, "d")) == 1) {
+                first_name.insert(0, "d");
+            }
+            else if (tmp.erase(0, 1) == first_name && vals.count(tmp.insert(0, "f")) == 1) {
+                first_name.insert(0, "f");
+            }
+            else if (tmp.erase(0, 1) == first_name && vals.count(tmp.insert(0, "c")) == 1) {
+                first_name.insert(0, "c");
+            }
+            else { throw invalid_argument("first variable is not found"); }
+            
+            tmp = second_name;
+            if (vals.count(tmp.insert(0, "i")) == 1) {
+                second_name.insert(0, "i");
+            }
+            else if (tmp.erase(0, 1) == second_name && vals.count(tmp.insert(0, "d")) == 1) {
+                second_name.insert(0, "d");
+            }
+            else if (tmp.erase(0, 1) == second_name && vals.count(tmp.insert(0, "f")) == 1) {
+                second_name.insert(0, "f");
+            }
+            else if (tmp.erase(0, 1) == second_name && vals.count(tmp.insert(0, "c")) == 1) {
+                second_name.insert(0, "c");
+            }
+            else { throw invalid_argument("second variable is not found"); }
+
+            switch (case_symb(symbol)) {
+            case '1':
+            {
+                if (vals.count(first_name) > 0 && vals.count(second_name) > 0) {
+                    if (first_name == second_name) {
+                        brackets.push("{");
+                        last_func = 'w';
+                    }
+                    else {
+                        should_read_cmd = false;
+                    }
+                    break;
+                }
+            }
+            case '2':
+            {
+                if (vals.count(first_name) > 0 && vals.count(second_name) > 0) {
+                    if (first_name != second_name) {
+                        brackets.push("{");
+                        last_func = 'w';
+                    }
+                    else {
+                        should_read_cmd = false;
+                    }
+                }
+                break;
+            }
+            case '3':
+            {
+                if (vals.count(first_name) > 0 && vals.count(second_name) > 0) {
+                    if (first_name > second_name) {
+                        brackets.push("{");
+                        last_func = 'w';
+                    }
+                    else {
+                        should_read_cmd = false;
+                    }
+                }
+                break;
+            }
+            case '4':
+            {
+                if (vals.count(first_name) > 0 && vals.count(second_name) > 0) {
+                    if (first_name >= second_name) {
+                        brackets.push("{");
+                        last_func = 'w';
+                    }
+                    else {
+                        should_read_cmd = false;
+                    }
+                }
+                break;
+            }
+            case '5':
+            {
+                if (vals.count(first_name) > 0 && vals.count(second_name) > 0) {
+                    if (first_name < second_name) {
+                        brackets.push("{");
+                        last_func = 'w';
+                    }
+                    else {
+                        should_read_cmd = false;
+                    }
+                }
+                break;
+            }
+            case '6':
+            {
+                if (vals.count(first_name) > 0 && vals.count(second_name) > 0) {
+                    if (first_name <= second_name) {
+                        brackets.push("{");
+                        last_func = 'w';
+                    }
+                    else {
+                        should_read_cmd = false;
+                    }
+                }
+                break;
+            }
+
+            }
+        }
+    }
 }
 
 void ReadCmd::procFor() {
@@ -375,7 +507,7 @@ void ReadCmd::procFor() {
                 first_name.insert(0, "i");
             }
             else if (tmp.erase(0,1) == first_name && vals.count(tmp.insert(0, "d"))==1){
-                first_name.insert(0, "i");
+                first_name.insert(0, "d");//////////стояло i, скорее всего ошибся, исправила
             }
             else if (tmp.erase(0,1) == first_name && vals.count(tmp.insert(0, "f"))==1){
                 first_name.insert(0, "f");
@@ -390,7 +522,7 @@ void ReadCmd::procFor() {
                 second_name.insert(0, "i");
             }
             else if (tmp.erase(0,1) == first_name && vals.count(tmp.insert(0, "d"))==1){
-                second_name.insert(0, "i");
+                second_name.insert(0, "d");//////////стояло i, скорее всего ошибся, исправила
             }
             else if (tmp.erase(0,1) == first_name && vals.count(tmp.insert(0, "f"))==1){
                 second_name.insert(0, "f");
@@ -438,12 +570,12 @@ char ReadCmd::stringToChar(string data)
 	return data[0];
 }
 
-bool ReadCmd::isDigit(const char& first_symbol)
+/*bool ReadCmd::isDigit(const char& first_symbol)
 {
 	if ((first_symbol <= '9' && first_symbol >= '0') || first_symbol == '.')
 		return true;
 	return false;
-}
+}*/
 
 bool ReadCmd::isDigit(char first_symbol)
 {
