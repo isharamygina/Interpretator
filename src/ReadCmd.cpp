@@ -355,6 +355,7 @@ void ReadCmd::procIf() {
 
 void ReadCmd::procMain() {
     brackets.push("{");
+    
 }
 
 void ReadCmd::procWhile() {
@@ -366,6 +367,7 @@ void ReadCmd::procWhile() {
         regex conditionRegex("(.*)(.*)(.*)"); //processing condition
         smatch match;
         if (regex_search(condition, match, conditionRegex)) {
+            brackets.push("{");
             string tmp = "";
             string first_name = match[1].str();
             string symbol = match[2].str();
@@ -507,7 +509,7 @@ void ReadCmd::procFor() {
                 first_name.insert(0, "i");
             }
             else if (tmp.erase(0,1) == first_name && vals.count(tmp.insert(0, "d"))==1){
-                first_name.insert(0, "d");//////////стояло i, скорее всего ошибся, исправила
+                first_name.insert(0, "d");
             }
             else if (tmp.erase(0,1) == first_name && vals.count(tmp.insert(0, "f"))==1){
                 first_name.insert(0, "f");
@@ -521,13 +523,13 @@ void ReadCmd::procFor() {
             if (vals.count(tmp.insert(0, "i"))==1){
                 second_name.insert(0, "i");
             }
-            else if (tmp.erase(0,1) == first_name && vals.count(tmp.insert(0, "d"))==1){
-                second_name.insert(0, "d");//////////стояло i, скорее всего ошибся, исправила
+            else if (tmp.erase(0,1) == second_name && vals.count(tmp.insert(0, "d"))==1){
+                second_name.insert(0, "d");
             }
-            else if (tmp.erase(0,1) == first_name && vals.count(tmp.insert(0, "f"))==1){
+            else if (tmp.erase(0,1) == second_name && vals.count(tmp.insert(0, "f"))==1){
                 second_name.insert(0, "f");
             }
-            else if (tmp.erase(0,1) == first_name && vals.count(tmp.insert(0, "c"))==1){
+            else if (tmp.erase(0,1) == second_name && vals.count(tmp.insert(0, "c"))==1){
                 second_name.insert(0, "c");
             }
             else{throw invalid_argument ("second variable not found in for loop");}
